@@ -34,10 +34,10 @@ public:
 	void Call();
 	void DrawQuad();
 
-	void SetUniform(const std::string& Name, CVector& Value);
-	void SetUniform(const std::string& Name, float Value);
-	void SetUniform(const std::string& Name, double Value);
-	void SetUniform(const std::string& Name, int Value);
+	bool SetUniform(const std::string& Name, CVector& Value);
+	bool SetUniform(const std::string& Name, float Value);
+	bool SetUniform(const std::string& Name, double Value);
+	bool SetUniform(const std::string& Name, int Value);
 
 private:
 	

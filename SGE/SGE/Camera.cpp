@@ -56,7 +56,7 @@ void CCamera::Update(double FrameTime)
 
 	POINT mpos;
 	GetCursorPos(&mpos);
-	/*
+	
 	if(mpos.x != CenterX || mpos.y != CenterY)
 	{
 		double Y = CenterX - mpos.x;
@@ -75,7 +75,7 @@ void CCamera::Update(double FrameTime)
 
 		SetCursorPos(CenterX, CenterY);
 	}
-	*/
+	
 	double right = 0.0;
 	double fwd = 0.0;
 	double up = 0.0;

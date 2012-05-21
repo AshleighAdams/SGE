@@ -148,28 +148,40 @@ bool CShader::Compile(const std::string& File, std::string& Error)
 	return true;
 }
 
-void CShader::SetUniform(const std::string& Name, CVector& Value)
+bool CShader::SetUniform(const std::string& Name, CVector& Value)
 {
 	int v = glGetUniformLocation(m_Program, Name.c_str());
+	if(v > 1)
+		return false;
 	glUniform3d(v, Value.X, Value.Y, Value.Z);
+	return true;
 }
 
-void CShader::SetUniform(const std::string& Name, float Value)
+bool CShader::SetUniform(const std::string& Name, float Value)
 {
 	int v = glGetUniformLocation(m_Program, Name.c_str());
+	if(v > 1)
+		return false;
 	glUniform1f(v, Value);
+	return true;
 }
 
-void CShader::SetUniform(const std::string& Name, double Value)
+bool CShader::SetUniform(const std::string& Name, double Value)
 {
 	int v = glGetUniformLocation(m_Program, Name.c_str());
+	if(v < 0)
+		return false;
 	glUniform1d(v, Value);
+	return true;
 }
 
-void CShader::SetUniform(const std::string& Name, int Value)
+bool CShader::SetUniform(const std::string& Name, int Value)
 {
 	int v = glGetUniformLocation(m_Program, Name.c_str());
+	if(v < 0)
+		return false;
 	glUniform1i(v, Value);
+	return true;
 }
 
 void CShader::Call()
