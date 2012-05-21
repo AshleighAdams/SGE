@@ -10,3 +10,18 @@
 *.lai
 *.la
 *.a
+
+# VS specific
+*.opensdf
+*.sdf
+*.ncf
+*.ilk
+*.ipch
+*.pdb
+
+# nVidia stuff
+*.nvact
+
+# Project specific
+SGE/Debug/*
+SGE/Release/*
