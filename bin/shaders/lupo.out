@@ -1,0 +1,4 @@
+uniform double time
+void main(void)
+{
+}
