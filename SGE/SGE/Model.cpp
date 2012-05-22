@@ -482,6 +482,9 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vert_t) * faces * 3, m_pVertexes, GL_STATIC_DRAW);
 
 	// Bind texturecords
+	glGenBuffers(1, &m_TBOID);
+	glBindBuffer(GL_ARRAY_BUFFER, m_TBOID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vert_t) * faces * 3, m_pTextureCords, GL_STATIC_DRAW);
 
 	// Bind normals
 	glGenBuffers(1, &m_NBOID);
@@ -632,15 +635,22 @@ void CModel::Draw(CVector& Pos, CAngle& Ang)
 		glColor3d(1.0, 1.0, 1.0);
 		
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
+		
+			glBindBuffer(GL_ARRAY_BUFFER, m_VBOID); // Vertecies
 			glVertexPointer(3, GL_DOUBLE, 0, 0);
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_NBOID);
+			glBindBuffer(GL_ARRAY_BUFFER, m_TBOID); // Texture cords
+			glTexCoordPointer(3, GL_DOUBLE, 0, 0);
+
+			glBindBuffer(GL_ARRAY_BUFFER, m_NBOID); // And finally the normals
 			glNormalPointer(GL_DOUBLE, 0, 0);
 
 			glDrawArrays(GL_TRIANGLES, 0, m_VertCount);
+
 		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 	glPopMatrix();
 }
