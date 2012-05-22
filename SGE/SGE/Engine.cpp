@@ -317,7 +317,7 @@ void CEngineInstance::UpdateViewport(unsigned int Width, unsigned int Height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(90.0f / 2.f, (GLfloat)Width / (GLfloat)Height, 0.01f, 10000.0f);
+	gluPerspective(m_Options.FOV() / 2.f, (GLfloat)Width / (GLfloat)Height, 0.1f, 10000.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

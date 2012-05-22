@@ -13,12 +13,15 @@ public:
 	void LoadSettings();
 	double MouseSensitivity();
 	double SetMouseSensitivity();
+	double FOV();
+	void SetFOV(double What);
 	res_t GetResolution();
 	void SetResolution();
 	bool DebugNormals();
 private:
 	CConfigor m_Config;
 	double m_Sensitivity;
+	double m_FOV;
 	bool m_DebugNormals;
 };
 

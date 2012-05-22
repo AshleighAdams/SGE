@@ -9,24 +9,53 @@ COptions::COptions()
 {
 }
 
+
+
 void COptions::LoadSettings()
 {
 	m_Config.LoadFromFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
-	stringstream ss;
-
-	IConfigorNode* node = m_Config.GetRootNode()->GetChild("sensitivity");
 	
+	IConfigorNode* node;
+	
+	node = m_Config.GetRootNode()->GetChild("sensitivity");
 	if(!node)
 		m_Sensitivity = 1.0;
 	else
 	{
+		stringstream ss;
 		ss << node->GetString();
 		ss >> m_Sensitivity;
 	}
+	
+	node = m_Config.GetRootNode()->GetChild("debug");
+	if(node && node->GetChild("normals"))
+	{
+		stringstream ss;
+		ss << node->GetChild("normals")->GetString();
+		ss >> m_DebugNormals;
+	}
+	else
+		m_DebugNormals = false;
 
-	stringstream a;
-	a << (*m_Config.GetRootNode())["debug"]["normals"].GetString();
-	a >> m_DebugNormals;
+	node = m_Config.GetRootNode()->GetChild("fov");
+	if(node)
+	{
+		stringstream ss;
+		ss << node->GetString();
+		ss >> m_FOV;
+	}
+	else
+		m_FOV = 90.0;
+}
+
+void COptions::SetFOV(double Val)
+{
+	m_FOV = Val;
+}
+
+double COptions::FOV()
+{
+	return m_FOV;
 }
 
 void COptions::SaveSettings()
@@ -35,6 +64,11 @@ void COptions::SaveSettings()
 
 	ss << m_Sensitivity;
 	(*m_Config.GetRootNode())["sensitivity"] = (char*)ss.str().c_str();
+
+	ss.str("");
+
+	ss << m_FOV;
+	(*m_Config.GetRootNode())["fov"] = (char*)ss.str().c_str();
 
 	m_Config.SaveToFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
 }
