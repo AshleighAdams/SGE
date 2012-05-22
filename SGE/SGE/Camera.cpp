@@ -13,8 +13,7 @@ CCamera::CCamera()
 	m_Up.Y = 0.0;
 	m_Up.Z = 1.0;
 
-	m_Pitch = 0.0;
-	m_Yaw = 0.0;
+	m_Angle = CAngle(0, 0, 0);
 
 	m_VelocityAccumulator = 0.0;
 	m_Velocity = CVector(0, 0, 0);
@@ -22,7 +21,7 @@ CCamera::CCamera()
 
 void CCamera::LookAt()
 {
-	CVector dir(m_Pitch, m_Yaw);
+	CVector dir = m_Angle.Forward();
 	dir += m_Position;
 
 	gluLookAt(m_Position.X,		m_Position.Y,	m_Position.Z,
@@ -54,6 +53,9 @@ void CCamera::Update(double FrameTime)
 	if(!pEngineInstance->Focused())
 		return;
 
+	if(GetKeyState('L') & 0x80)
+		m_Position = CVector(10, 0, 1);
+
 	int CenterX = pEngineInstance->m_WindowWidth / 2;
 	int CenterY = pEngineInstance->m_WindowHeight / 2;
 
@@ -65,15 +67,15 @@ void CCamera::Update(double FrameTime)
 		double Y = CenterX - mpos.x;
 		double P = CenterY - mpos.y;
 
-		m_Pitch += P * 0.003;
-		m_Yaw += Y * 0.003;
+		m_Angle.Pitch += P * 0.003;
+		m_Angle.Yaw += Y * 0.003;
 
-		if(m_Pitch > 1.5)
-			m_Pitch = 1.5;
-		else if(m_Pitch < -1.5)
-			m_Pitch = -1.5;
-
-		m_Yaw = modulus(m_Yaw, 3.14159265358979232 * 2.0);
+		if(m_Angle.Pitch > 1.5)
+			m_Angle.Pitch = 1.5;
+		else if(m_Angle.Pitch < -1.5)
+			m_Angle.Pitch = -1.5;
+		
+		m_Angle.Yaw = modulus(m_Angle.Yaw, 3.14159265358979232 * 2.0);
 		
 
 		SetCursorPos(CenterX, CenterY);
@@ -99,33 +101,35 @@ void CCamera::Update(double FrameTime)
 	if(up == 0.0 && fwd == 0.0 && right == 0.0 && m_Velocity.LengthSqr() == 0.0)
 		return;
 
-	double speed = 25.0;
+	double speed = 5.0;
 
 	if(GetKeyState(VK_SHIFT) & 0x80)
-		speed = 75.0;
+		speed = 10.0;
 
 	if(GetKeyState(VK_CONTROL) & 0x80)
 		speed = 1.0;
 
 	speed *= FrameTime;
 
-	CVector vFwd = CVector(m_Pitch, m_Yaw) * fwd;
-	CVector vRight = CVector(0.0, m_Yaw).Cross(CVector(0.0, 0.0, 1.0)) * right;
+	CVector vFwd = m_Angle.Forward() * fwd;
+	CVector vRight = m_Angle.Right() * right;
 	CVector vUp = CVector(0.0, 0.0, 1.0) * up;
 
-	CVector vComb = vUp + vRight + vFwd;
+	CVector acceleration = vUp + vRight + vFwd;
 
-	vComb.Normalize();
-	CVector TargetVelocity = vComb * speed;
+	double accelspeed = min(acceleration.Length(), speed);
+	CVector acceldir = acceleration.Normal();
 
-	if(TargetVelocity.LengthSqr() == 0.0)
-		m_VelocityAccumulator = 1;
-	else
-		m_VelocityAccumulator = 2;
+	acceleration = acceldir * accelspeed * speed;
 
-	m_Velocity.Approach(TargetVelocity, m_VelocityAccumulator * FrameTime);
+	const double NoClipAccelerate = 5.0;
 
-	m_Position += m_Velocity;
+	CVector newvel = m_Velocity + acceleration * FrameTime * NoClipAccelerate;
+	newvel = newvel * (0.95 - FrameTime * 4.0);
+	
+	m_Velocity = newvel;
+
+	m_Position = m_Position + (newvel * 5000.0) * FrameTime;
 
 	if(GetKeyState('L') & 0x80)
 		m_Position = CVector(10, 0, 1);
