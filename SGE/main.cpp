@@ -26,7 +26,7 @@ public:
 	{
 		string s = CBaseEntity::GetClass();
 		m_ClassName = "CStaticProp:" + s;
-		m_Model.SetModel("bench.obj", true);
+		m_Model.SetModel("teapot.obj", true);
 		m_Pos = CVector(0, 0, 0);
 		m_Ang = CAngle(0, 0, 0);
 		m_Shader = CShader();
@@ -34,7 +34,7 @@ public:
 		m_Shader.Compile("wobble.shader", null);
 		m_Shader.Call();
 		m_Shader.SetUniform("time", pEngineInstance->GetTime());
-		m_Texture.LoadFromFile("wood.tga");
+		m_Texture.LoadFromFile("sample.tga");
 	}
 	~CStaticProp()
 	{
@@ -61,6 +61,7 @@ public:
 	void Draw()
 	{
 		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		m_Texture.Bind();
 		m_Model.Draw(m_Pos, m_Ang);
 		glDisable(GL_TEXTURE_2D);

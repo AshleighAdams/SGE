@@ -423,59 +423,64 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 		for(unsigned int i = 0; i < faces * 3; i++)
 			m_pNormals[i].Normalize();
 		
-		// Now, lets smooth the normals
-		bool* pDoneVert = new bool[faces * 3];
+		// Now, lets smooth the normals, as long as we don't have too many verts
 
-		for(unsigned int i = 0; i < faces * 3; i++)
-			pDoneVert[i] = false;
-
-		for(unsigned int i = 0; i < faces * 3; i++)
+		if(faces < 20000)
 		{
-			if(pDoneVert[i])
-				continue;
-			pDoneVert[i] = true;
-			
-			vector<CVector*> group;
+			bool* pDoneVert = new bool[faces * 3];
 
-			group.push_back(&m_pNormals[i]);
-			CVector& apos = m_pVertexes[i];
-			CVector& anorm = m_pNormals[i];
+			for(unsigned int i = 0; i < faces * 3; i++)
+				pDoneVert[i] = false;
 
-			for(unsigned int n = i; n < faces * 3; n++)
+			for(unsigned int i = 0; i < faces * 3; i++)
 			{
-				if(pDoneVert[n])
+				if(pDoneVert[i])
 					continue;
-				
-				CVector& bpos = m_pVertexes[n];
-				CVector& bnrm = m_pNormals[n];
-				
-				// TODO: Angle!
-
-				if(apos == bpos) //(apos-bpos).Length() < 0.00001 )
-				{
-					group.push_back(&m_pNormals[n]);
-					pDoneVert[n] = true;
-				}
-			}
-
-			if(group.size() == 1)
-				continue;
-
-			//cout << "Found a group of " << group.size() << " normals\n";
-
-			CVector avg = CVector(0, 0, 0);
-
-			for(size_t i = 0; i < group.size(); i++)
-				avg += *group[i];
+				pDoneVert[i] = true;
 			
-			avg.Div(group.size());
-			avg.Normalize();
+				vector<CVector*> group;
 
-			for(size_t i = 0; i < group.size(); i++)
-				*group[i] = avg;
+				group.push_back(&m_pNormals[i]);
+				CVector& apos = m_pVertexes[i];
+				CVector& anorm = m_pNormals[i];
+
+				for(unsigned int n = i; n < faces * 3; n++)
+				{
+					if(pDoneVert[n])
+						continue;
+				
+					CVector& bpos = m_pVertexes[n];
+					CVector& bnrm = m_pNormals[n];
+				
+					// TODO: Angle!
+
+					if(apos == bpos) //(apos-bpos).Length() < 0.00001 )
+					{
+						group.push_back(&m_pNormals[n]);
+						pDoneVert[n] = true;
+					}
+				}
+
+				if(group.size() == 1)
+					continue;
+
+				//cout << "Found a group of " << group.size() << " normals\n";
+
+				CVector avg = CVector(0, 0, 0);
+
+				for(size_t i = 0; i < group.size(); i++)
+					avg += *group[i];
+			
+				avg.Div(group.size());
+				avg.Normalize();
+
+				for(size_t i = 0; i < group.size(); i++)
+					*group[i] = avg;
+			}
+			delete [] pDoneVert;
 		}
-		delete [] pDoneVert;
-		
+		else
+			std::cout << "Warning: the model has too many faces, not calculating smooth normals!\n";
 	}
 	
 	// Bind verts
