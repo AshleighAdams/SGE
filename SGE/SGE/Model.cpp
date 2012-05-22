@@ -185,12 +185,12 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 			return false;
 		if(Peak("/"))
 		{
-			v1_lvl++;
-			if(!ReadInt(v1tc)) return false;
+			i++;
+			ReadInt(v1tc);
 			if(Peak("/"))
 			{
-				if(!ReadInt(v1n)) return false;
-				v1_lvl++;
+				i++;
+				ReadInt(v1n);
 			}
 		}
 		ReadToNoneSpace();
@@ -200,12 +200,12 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 			return false;
 		if(Peak("/"))
 		{
-			v2_lvl++;
-			if(!ReadInt(v2tc)) return false;
+			i++;
+			ReadInt(v2tc);
 			if(Peak("/"))
 			{
-				if(!ReadInt(v2n)) return false;
-				v2_lvl++;
+				i++;
+				ReadInt(v2n);
 			}
 		}
 		ReadToNoneSpace();
@@ -215,12 +215,12 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 			return false;
 		if(Peak("/"))
 		{
-			v3_lvl++;
-			if(!ReadInt(v3tc)) return false;
+			i++;
+			ReadInt(v3tc);
 			if(Peak("/"))
 			{
+				i++;
 				ReadInt(v3n);
-				v3_lvl++;
 			}
 		}
 		ReadToNoneSpace();
@@ -250,13 +250,10 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 				return false;
 			if(Peak("/"))
 			{
-				v4_lvl++;
-				if(!ReadInt(v4tc)) return false;
+				i++;
+				ReadInt(v4tc);
 				if(Peak("/"))
-				{
 					ReadInt(v4n);
-					v4_lvl++;
-				}
 			}
 			
 
@@ -286,7 +283,10 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 		char x = pContents[i];
 
 		if(x == '#')
+		{
 			ReadToNewLine();
+			continue;
+		}
 
 		ReadToNoneSpace();
 
@@ -298,6 +298,8 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 			HandelNorm();
 		else if(Peak("vt "))
 			HandelTextCord();
+		else
+			ReadToNewLine();
 	}
 }
 
