@@ -18,6 +18,7 @@
 *.ilk
 *.ipch
 *.pdb
+*.suo
 
 # nVidia stuff
 *.nvact
