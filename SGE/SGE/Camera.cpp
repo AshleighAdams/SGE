@@ -123,7 +123,7 @@ void CCamera::Update(double FrameTime)
 	else
 		m_VelocityAccumulator = 2;
 
-	m_Velocity.Aproach(TargetVelocity, m_VelocityAccumulator * FrameTime);
+	m_Velocity.Approach(TargetVelocity, m_VelocityAccumulator * FrameTime);
 
 	m_Position += m_Velocity;
 

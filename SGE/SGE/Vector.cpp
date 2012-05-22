@@ -96,7 +96,7 @@ inline double Clamp(const double& Val, const double& Min, const double& Max)
 	return min(max(Val, Min), Max);
 }
 
-inline void AproachDbl(double& Cur, const double& Targ, const double& Ammount)
+inline void ApproachDbl(double& Cur, const double& Targ, const double& Ammount)
 {
 	double inc = abs(Ammount);
 
@@ -106,15 +106,15 @@ inline void AproachDbl(double& Cur, const double& Targ, const double& Ammount)
 		Cur = Clamp(Cur - inc, Targ, Cur);
 }
 
-CVector& CVector::Aproach(CVector& What, const double& Ammount)
+CVector& CVector::Approach(CVector& What, const double& Ammount)
 {
 	CVector norm = ((*this) - What).Normalize();
 	double MultX = abs(norm.X);
 	double MultY = abs(norm.Y);
 	double MultZ = abs(norm.Z);
-	AproachDbl(X, What.X, Ammount * MultX);
-	AproachDbl(Y, What.Y, Ammount * MultY);
-	AproachDbl(Z, What.Z, Ammount * MultZ);
+	ApproachDbl(X, What.X, Ammount * MultX);
+	ApproachDbl(Y, What.Y, Ammount * MultY);
+	ApproachDbl(Z, What.Z, Ammount * MultZ);
 
 	return *this;
 }

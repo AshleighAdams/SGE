@@ -33,7 +33,7 @@ public:
 
 	// These modify the vector!
 	CVector& Normalize();
-	CVector& Aproach(CVector& What, const double& Ammount);
+	CVector& Approach(CVector& What, const double& Ammount);
 
 	// Math funcs, changes itself
 	CVector& Add(CVector& A);
