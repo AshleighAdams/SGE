@@ -36,6 +36,7 @@ public:
 	void Update();
 	void Draw();
 	double GetTime();
+	bool Focused();
 	CCamera*		GetCamera();
 	CFileSystem*	GetFileSystem();
 	COptions*		GetOptions();

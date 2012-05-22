@@ -268,6 +268,11 @@ bool CEngineInstance::UpdateWindow(string Title, unsigned int Width, unsigned in
 	return true;
 }
 
+bool CEngineInstance::Focused()
+{
+	return GetActiveWindow() == m_Wnd;
+}
+
 void CEngineInstance::KillWindow()
 {
 	if (m_FullScreen)
