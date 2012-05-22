@@ -15,17 +15,18 @@ using namespace std;
 
 class CStaticProp : public CBaseEntity
 {
-	string 	m_ClassName;
-	CModel	m_Model;
-	CVector m_Pos;
-	CAngle	m_Ang;
-	CShader m_Shader;
+	string 		m_ClassName;
+	CModel		m_Model;
+	CVector		m_Pos;
+	CAngle		m_Ang;
+	CShader		m_Shader;
+	CTexture	m_Texture;
 public:
 	CStaticProp()
 	{
 		string s = CBaseEntity::GetClass();
 		m_ClassName = "CStaticProp:" + s;
-		m_Model.SetModel("teapot.obj", true);
+		m_Model.SetModel("bench.obj", true);
 		m_Pos = CVector(0, 0, 0);
 		m_Ang = CAngle(0, 0, 0);
 		m_Shader = CShader();
@@ -33,6 +34,7 @@ public:
 		m_Shader.Compile("wobble.shader", null);
 		m_Shader.Call();
 		m_Shader.SetUniform("time", pEngineInstance->GetTime());
+		m_Texture.LoadFromFile("wood.tga");
 	}
 	~CStaticProp()
 	{
@@ -58,11 +60,10 @@ public:
 	}
 	void Draw()
 	{
-		m_Shader.Call();
+		glEnable(GL_TEXTURE_2D);
+		m_Texture.Bind();
 		m_Model.Draw(m_Pos, m_Ang);
-		m_Shader.SetUniform("time", pEngineInstance->GetTime());
-		m_Shader.Call();
-		m_Shader.DrawQuad();
+		glDisable(GL_TEXTURE_2D);
 	}
 	void DrawDebug()
 	{

@@ -20,6 +20,7 @@
 #include "Model.h"
 #include "World.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class CModel;
 
