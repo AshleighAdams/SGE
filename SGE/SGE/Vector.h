@@ -19,28 +19,29 @@ public:
 	CVector(double Pitch, double Yaw);
 	CVector();
 	~CVector();
-	double Length();
-	double LengthSqr(); // These operations are good for comparison, they offer a 'round compare distance' without the slowdowns of sqrt()
-	double Length2D();
-	double Length2DSqr();
+	double Length() const;
+	double LengthSqr() const; // These operations are good for comparison, they offer a 'round compare distance' without the slowdowns of sqrt()
+	double Length2D() const;
+	double Length2DSqr() const;
 
-	CAngle ToAngle();
-	
-	CVector Normal();
-	double Distance(CVector& A);
-	CVector Cross(CVector& A);
-	double Dot(CVector& A);
+	CAngle ToAngle() const;
+	CVector Right() const;
+
+	CVector Normal() const;
+	double Distance(const CVector& A) const;
+	CVector Cross(const CVector& A) const;
+	double Dot(const CVector& A) const;
 
 	// These modify the vector!
 	CVector& Normalize();
-	CVector& Approach(CVector& What, const double& Ammount);
+	CVector& Approach(const CVector& What, const double& Ammount);
 
 	// Math funcs, changes itself
-	CVector& Add(CVector& A);
-	CVector& Sub(CVector& A);
-	CVector& Mul(CVector& A);
+	CVector& Add(const CVector& A);
+	CVector& Sub(const CVector& A);
+	CVector& Mul(const CVector& A);
 	CVector& Mul(double Scalar);
-	CVector& Div(CVector& A);
+	CVector& Div(const CVector& A);
 	CVector& Div(double Scalar);
 };
 
@@ -52,31 +53,31 @@ std::istream& operator>>(std::istream&, CVector&);
 std::ostream& operator<<(std::ostream&, CVector&);
 
 // Math operators, but not with own type (Vec * 5.0)
-CVector operator*(CVector&, double); // Scale
-CVector operator/(CVector&, double);
+CVector operator*(const CVector&, double); // Scale
+CVector operator/(const CVector&, double);
 
 // Math operators
-CVector operator+(CVector&, CVector&);
-CVector operator-(CVector&, CVector&);
-CVector operator*(CVector&, CVector&);
-CVector operator/(CVector&, CVector&);
+CVector operator+(const CVector&, const CVector&);
+CVector operator-(const CVector&, const CVector&);
+CVector operator*(const CVector&, const CVector&);
+CVector operator/(const CVector&, const CVector&);
 
 // These return a reference to the first argument
-CVector& operator+=(CVector&, CVector&);
-CVector& operator-=(CVector&, CVector&);
-CVector& operator*=(CVector&, CVector&);
-CVector& operator/=(CVector&, CVector&);
+CVector& operator+=(CVector&, const CVector&);
+CVector& operator-=(CVector&, const CVector&);
+CVector& operator*=(CVector&, const CVector&);
+CVector& operator/=(CVector&, const CVector&);
 
 // Unary operators
-CVector operator+(CVector&);
-CVector operator-(CVector&);
+CVector operator+(const CVector&);
+CVector operator-(const CVector&);
 
 // Comparison operators
-bool operator==(CVector&, CVector&);
-bool operator!=(CVector&, CVector&);
-bool operator>(CVector&, CVector&);
-bool operator>=(CVector&, CVector&);
-bool operator<(CVector&, CVector&);
-bool operator<=(CVector&, CVector&);
+bool operator==(const CVector&, const CVector&);
+bool operator!=(const CVector&, const CVector&);
+bool operator>(const CVector&, const CVector&);
+bool operator>=(const CVector&, const CVector&);
+bool operator<(const CVector&, const CVector&);
+bool operator<=(const CVector&, const CVector&);
 
 #endif

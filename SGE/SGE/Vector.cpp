@@ -31,39 +31,53 @@ CVector::~CVector()
 
 // Functions
 
-double CVector::Length()
+double CVector::Length()  const
 {
 	return sqrt(X * X + Y * Y + Z * Z);
 }
 
-double CVector::LengthSqr()
+double CVector::LengthSqr()  const
 {
 	return X * X + Y * Y + Z * Z;
 }
 
-double CVector::Length2D()
+double CVector::Length2D()  const
 {
 	return sqrt(X * X + Y * Y);
 }
 
-double CVector::Length2DSqr()
+double CVector::Length2DSqr()  const
 {
 	return X * X + Y * Y;
 }
 
-CVector CVector::Normal()
+CAngle CVector::ToAngle()  const
+{
+	return CAngle(0, 0, 0);
+}
+
+CVector CVector::Right()  const
+{
+	CVector ret(*this);
+	ret.Z = 0;
+	return ret.Cross(CVector(0.0, 0.0, 1.0));
+}
+
+CVector CVector::Normal()  const
 {
 	double Len = Length();
+	if(Len == 0)
+		Len = 1.0;
 	return CVector(X / Len, Y / Len, Z / Len);
 }
 
-double CVector::Distance(CVector& A)
+double CVector::Distance(const CVector& A)  const
 {
 	CVector ret(X, Y, Z);
 	return (ret += A).Length();
 }
 
-CVector CVector::Cross(CVector& A)
+CVector CVector::Cross(const CVector& A)  const
 {
 	return CVector
 	(
@@ -73,7 +87,7 @@ CVector CVector::Cross(CVector& A)
 	);
 }
 
-double CVector::Dot(CVector& A)
+double CVector::Dot(const CVector& A)  const
 {
 	return X * A.X + Y * A.Y + Z * A.Z;
 }
@@ -106,7 +120,7 @@ inline void ApproachDbl(double& Cur, const double& Targ, const double& Ammount)
 		Cur = Clamp(Cur - inc, Targ, Cur);
 }
 
-CVector& CVector::Approach(CVector& What, const double& Ammount)
+CVector& CVector::Approach(const CVector& What, const double& Ammount)
 {
 	CVector norm = ((*this) - What).Normalize();
 	double MultX = abs(norm.X);
@@ -124,21 +138,21 @@ CVector& CVector::Approach(CVector& What, const double& Ammount)
 
 // Math functions, will be used by += but you can still use the method, flexibility.
 
-CVector& CVector::Add(CVector& A)
+CVector& CVector::Add(const CVector& A)
 {
 	X += A.X;
 	Y += A.Y;
 	Z += A.Z;
 	return *this;
 }
-CVector& CVector::Sub(CVector& A)
+CVector& CVector::Sub(const CVector& A)
 {
 	X -= A.X;
 	Y -= A.Y;
 	Z -= A.Z;
 	return *this;
 }
-CVector& CVector::Mul(CVector& A)
+CVector& CVector::Mul(const CVector& A)
 {
 	X *= A.X;
 	Y *= A.Y;
@@ -153,7 +167,7 @@ CVector& CVector::Mul(double Scalar)
 	Z *= Scalar;
 	return *this;
 }
-CVector& CVector::Div(CVector& A)
+CVector& CVector::Div(const CVector& A)
 {
 	X /= A.X;
 	Y /= A.Y;
@@ -186,96 +200,96 @@ std::ostream& operator<<(std::ostream& s, CVector& Vec)
 
 // Math operators using other than own type
 
-CVector operator*(CVector& A, double Scalar)
+CVector operator*(const CVector& A, double Scalar)
 {
 	return CVector(A.X * Scalar, A.Y * Scalar, A.Z * Scalar);
 }
-CVector operator/(CVector& A, double Scalar)
+CVector operator/(const CVector& A, double Scalar)
 {
 	return CVector(A.X / Scalar, A.Y / Scalar, A.Z / Scalar);
 }
 
-CVector operator*=(CVector& A, double Scalar)
+CVector& operator*=(CVector& A, double Scalar)
 {
 	return A.Mul(Scalar);
 }
-CVector operator/=(CVector& A, double Scalar)
+CVector& operator/=(CVector& A, double Scalar)
 {
 	return A.Div(Scalar);
 }
 
 // Math operators
 
-CVector operator+(CVector& A, CVector& B)
+CVector operator+(const CVector& A, const CVector& B)
 {
 	return CVector(A.X + B.X, A.Y + B.Y, A.Z + B.Z);
 }
-CVector operator-(CVector& A, CVector& B)
+CVector operator-(const CVector& A, const CVector& B)
 {
 	return CVector(A.X - B.X, A.Y - B.Y, A.Z - B.Z);
 }
-CVector operator*(CVector& A, CVector& B)
+CVector operator*(const CVector& A, const CVector& B)
 {
 	return CVector(A.X * B.X, A.Y * B.Y, A.Z * B.Z);
 }
-CVector operator/(CVector& A, CVector& B)
+CVector operator/(const CVector& A, const CVector& B)
 {
 	return CVector(A.X / B.X, A.Y / B.Y, A.Z / B.Z);
 }
 
 // X= operators
 
-CVector& operator+=(CVector& A, CVector& B)
+CVector& operator+=(CVector& A, const CVector& B)
 {
 	return A.Add(B);
 }
-CVector& operator-=(CVector& A, CVector& B)
+CVector& operator-=(CVector& A, const CVector& B)
 {
 	return A.Sub(B);
 }
-CVector& operator*=(CVector& A, CVector& B)
+CVector& operator*=(CVector& A, const CVector& B)
 {
 	return A.Mul(B);
 }
-CVector& operator/=(CVector& A, CVector& B)
+CVector& operator/=(CVector& A, const CVector& B)
 {
 	return A.Div(B);
 }
 
 
 // Unary operators
-CVector operator+(CVector& A)
+CVector operator+(const CVector& A)
 {
 	return CVector(+A.X, +A.Y, +A.Z);
 }
-CVector operator-(CVector& A)
+CVector operator-(const CVector& A)
 {
 	return CVector(-A.X, -A.Y, -A.Z);
 }
 
 // Comparison operators
 
-bool operator==(CVector& A, CVector& B)
+bool operator==(const CVector& A, const CVector& B)
 {
 	return A.X == B.X && A.Y == B.Y && A.Z == B.Z;
 }
-bool operator!=(CVector& A, CVector& B)
+bool operator!=(const CVector& A, const CVector& B)
 {
 	return !operator==(A, B);
 }
-bool operator>(CVector& A, CVector& B)
+bool operator>(const CVector& A, const CVector& B)
 {
 	return A.LengthSqr() > B.LengthSqr(); // To use no sqrt function (only squaring) is much, much quicker!
 }
-bool operator>=(CVector& A, CVector& B)
+bool operator>=(const CVector& A, const CVector& B)
 {
 	return operator==(A, B) || operator>(A,B);
 }
-bool operator<(CVector& A, CVector& B)
+bool operator<(const CVector& A, const CVector& B)
 {
 	return A.LengthSqr() < B.LengthSqr();
 }
-bool operator<=(CVector& A, CVector& B)
+bool operator<=(const CVector& A, const CVector& B)
 {
 	return operator==(A, B) || operator<(A,B);
 }
