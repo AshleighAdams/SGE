@@ -12,6 +12,9 @@ public:
 	double Roll;
 	CAngle(double Pitch, double Yaw, double Roll);
 	CAngle();
+	CVector Forward();
+	CVector Right();
+	CVector Up();
 	CVector ToVector();
 };
 
