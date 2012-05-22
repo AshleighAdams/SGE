@@ -85,6 +85,7 @@
     <ClCompile Include="SGE\Model.cpp" />
     <ClCompile Include="SGE\Options.cpp" />
     <ClCompile Include="SGE\Shader.cpp" />
+    <ClCompile Include="SGE\Texture.cpp" />
     <ClCompile Include="SGE\Vector.cpp" />
     <ClCompile Include="SGE\World.cpp" />
   </ItemGroup>
@@ -98,6 +99,7 @@
     <ClInclude Include="SGE\Model.h" />
     <ClInclude Include="SGE\Options.h" />
     <ClInclude Include="SGE\Shader.h" />
+    <ClInclude Include="SGE\Texture.h" />
     <ClInclude Include="SGE\Vector.h" />
     <ClInclude Include="SGE\World.h" />
   </ItemGroup>

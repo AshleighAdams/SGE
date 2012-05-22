@@ -51,6 +51,9 @@
     <ClCompile Include="SGE\Shader.cpp">
       <Filter>Source Files\SGE</Filter>
     </ClCompile>
+    <ClCompile Include="SGE\Texture.cpp">
+      <Filter>Source Files\SGE</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGE\Vector.h">
@@ -84,6 +87,9 @@
       <Filter>Source Files\SGE</Filter>
     </ClInclude>
     <ClInclude Include="SGE\Shader.h">
+      <Filter>Source Files\SGE</Filter>
+    </ClInclude>
+    <ClInclude Include="SGE\Texture.h">
       <Filter>Source Files\SGE</Filter>
     </ClInclude>
   </ItemGroup>
