@@ -15,6 +15,9 @@ CCamera::CCamera()
 
 	m_Pitch = 0.0;
 	m_Yaw = 0.0;
+
+	m_VelocityAccumulator = 0.0;
+	m_Velocity = CVector(0, 0, 0);
 }
 
 void CCamera::LookAt()
@@ -48,7 +51,7 @@ double modulus(double a, double b)
 
 void CCamera::Update(double FrameTime)
 {
-	if(!pEngineInstance->m_Focused)
+	if(!pEngineInstance->Focused())
 		return;
 
 	int CenterX = pEngineInstance->m_WindowWidth / 2;
@@ -93,7 +96,7 @@ void CCamera::Update(double FrameTime)
 	if(GetKeyState(' ') & 0x80)
 		up += 1.0;
 
-	if(up == 0.0 && fwd == 0.0 && right == 0.0)
+	if(up == 0.0 && fwd == 0.0 && right == 0.0 && m_Velocity.LengthSqr() == 0.0)
 		return;
 
 	double speed = 25.0;
@@ -113,6 +116,17 @@ void CCamera::Update(double FrameTime)
 	CVector vComb = vUp + vRight + vFwd;
 
 	vComb.Normalize();
+	CVector TargetVelocity = vComb * speed;
 
-	m_Position += vComb * speed;
+	if(TargetVelocity.LengthSqr() == 0.0)
+		m_VelocityAccumulator = 1;
+	else
+		m_VelocityAccumulator = 2;
+
+	m_Velocity.Aproach(TargetVelocity, m_VelocityAccumulator * FrameTime);
+
+	m_Position += m_Velocity;
+
+	if(GetKeyState('L') & 0x80)
+		m_Position = CVector(10, 0, 1);
 }

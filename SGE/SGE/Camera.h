@@ -13,6 +13,9 @@ public:
 	void LookAt();
 private:
 	CVector m_Position;
+	CVector m_Velocity;
+	double m_VelocityAccumulator;
+
 	double m_Pitch;
 	double m_Yaw;
 	CVector m_Up;
