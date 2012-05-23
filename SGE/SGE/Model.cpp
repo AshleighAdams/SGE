@@ -442,7 +442,7 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 
 				group.push_back(&m_pNormals[i]);
 				CVector& apos = m_pVertexes[i];
-				CVector& anorm = m_pNormals[i];
+				CVector& anrm = m_pNormals[i];
 
 				for(unsigned int n = i; n < faces * 3; n++)
 				{
@@ -454,7 +454,10 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 				
 					// TODO: Angle!
 
-					if(apos == bpos) //(apos-bpos).Length() < 0.00001 )
+					double ang = acos(bnrm.Dot(anrm));
+					double elurang = ang / 3.14159265358979323 * 180.0;
+
+					if(apos == bpos && elurang < 45.0) //(apos-bpos).Length() < 0.00001 )
 					{
 						group.push_back(&m_pNormals[n]);
 						pDoneVert[n] = true;
