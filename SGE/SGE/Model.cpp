@@ -127,7 +127,7 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 	function<bool(void)> HandelNorm = [&]() -> bool
 	{
 		double x,y,z;
-		i++;
+		i+=2;
 		ReadToNoneSpace();
 		if(!ReadDouble(x))
 			return false;
@@ -347,6 +347,9 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 	for(auto it = lexed.begin(); it != lexed.end(); it++)
 	{
 		ObjLexNode* node = *it;
+		unsigned int  debug1 = node->Data.Face.Part1.VertID - 1;
+		unsigned int  debug2 = node->Data.Face.Part1.NormID - 1;
+		unsigned int  debug3 = node->Data.Face.Part1.TextureCordsID - 1;
 		switch(node->Type)
 		{
 		case node->Face:
