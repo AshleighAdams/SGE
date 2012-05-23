@@ -34,7 +34,7 @@ public:
 		m_Shader.Compile("wobble.shader", null);
 		m_Shader.Call();
 		m_Shader.SetUniform("time", pEngineInstance->GetTime());
-		m_Texture.LoadFromFile("sample.tga");
+		m_Texture.LoadFromFile("wood.tga");
 	}
 	~CStaticProp()
 	{
