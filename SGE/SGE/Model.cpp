@@ -151,7 +151,7 @@ void LexObj(const char* pContents, std::list<ObjLexNode*>& out)
 	function<bool(void)> HandelTextCord = [&]() -> bool
 	{
 		double u,v,w;
-		i++;
+		i += 2;
 		ReadToNoneSpace();
 		if(!ReadDouble(u))
 			return false;

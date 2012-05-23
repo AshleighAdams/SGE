@@ -22,6 +22,8 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include <assert.h>
+
 class CModel;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

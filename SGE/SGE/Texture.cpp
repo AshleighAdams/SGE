@@ -109,7 +109,8 @@ bool CTexture::LoadFromFile(const string& File)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
  
-	glTexImage2D(GL_TEXTURE_2D, 0, type, Width, Height, format, type, GL_UNSIGNED_BYTE, m_pPixelData);
+	glTexImage2D(GL_TEXTURE_2D, 0, type, Width, Height, 0, type, GL_UNSIGNED_BYTE, m_pPixelData);
 
+	assert(glGetError());
 	return true;
 }
