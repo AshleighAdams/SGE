@@ -26,7 +26,7 @@ public:
 	{
 		string s = CBaseEntity::GetClass();
 		m_ClassName = "CStaticProp:" + s;
-		m_Model.SetModel("square.obj", true);
+		m_Model.SetModel("pencil.obj", true);
 		m_Pos = CVector(0, 0, 0);
 		m_Ang = CAngle(0, 0, 0);
 		m_Shader = CShader();
@@ -34,7 +34,7 @@ public:
 		m_Shader.Compile("wobble.shader", null);
 		m_Shader.Call();
 		m_Shader.SetUniform("time", pEngineInstance->GetTime());
-		m_Texture.LoadFromFile("wood.tga");
+		m_Texture.LoadFromFile("body.tga");
 	}
 	~CStaticProp()
 	{
@@ -56,7 +56,7 @@ public:
 	}
 	void Simulate(double Time) // Called every frame, with a frame time
 	{
-		m_Ang.Yaw += 10.0 * Time; // 10 Deg per second
+		//m_Ang.Yaw += 40.0 * Time; // 10 Deg per second
 	}
 	void Draw()
 	{
