@@ -13,28 +13,55 @@ using namespace std;
 #include "SGE/Model.h"
 
 
+class CTestShader : public CShader
+{
+public:
+	CTestShader()
+	{
+		TimeU = 0;
+	}
+	virtual bool Compile(const std::string& File, std::string& Error)
+	{
+		bool ret = CShader::Compile(File, Error);
+		Call();
+		TimeU = glGetUniformLocation(m_Program, "time");
+		return ret;
+	}
+	bool SetTime(double Val)
+	{
+		if(TimeU < 0)
+			return false;
+		glUniform1d(TimeU, Val);
+		TimeU = Val;
+	}
+private:
+	int TimeU;
+};
+
 class CStaticProp : public CBaseEntity
 {
 	string 		m_ClassName;
 	CModel		m_Model;
 	CVector		m_Pos;
 	CAngle		m_Ang;
-	CShader		m_Shader;
+	CTestShader	m_Shader;
 	CTexture	m_Texture;
 public:
 	CStaticProp()
 	{
 		string s = CBaseEntity::GetClass();
 		m_ClassName = "CStaticProp:" + s;
-		m_Model.SetModel("pencil.obj", true);
+		m_Model.SetModel("playertemp.obj", true);
 		m_Pos = CVector(0, 0, 0);
 		m_Ang = CAngle(0, 0, 0);
-		m_Shader = CShader();
+		m_Shader = CTestShader();
 		string null;
-		m_Shader.Compile("wobble.shader", null);
+		
+		m_Shader.Compile("test.shader", null);
 		m_Shader.Call();
-		m_Shader.SetUniform("time", pEngineInstance->GetTime());
-		m_Texture.LoadFromFile("body.tga");
+		m_Shader.SetTime(pEngineInstance->GetTime());
+
+		m_Texture.LoadFromFile("sample.tga");
 	}
 	~CStaticProp()
 	{
@@ -58,9 +85,14 @@ public:
 	{
 		//m_Ang.Yaw += 40.0 * Time; // 10 Deg per second
 	}
+	void PostDraw()
+	{
+		m_Shader.SetTime(pEngineInstance->GetTime());
+		m_Shader.Call();
+		//m_Shader.DrawQuad();
+	}
 	void Draw()
 	{
-		
 		glEnable(GL_TEXTURE_2D);
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		m_Texture.Bind();

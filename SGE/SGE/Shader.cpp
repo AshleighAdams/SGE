@@ -127,34 +127,82 @@ bool CShader::Compile(const std::string& File, std::string& Error)
 		return false;
 	m_PreProcessor.Undefine("FRAGMENT");
 
-	m_VSOID = glCreateShader(GL_VERTEX_SHADER);
-	m_FSOID = glCreateShader(GL_FRAGMENT_SHADER);
+#define assert_shader(Reason) \
+	do \
+	{ \
+		unsigned int error = glGetError();\
+		if(error)\
+		{\
+			cout << "Warning: Failed to compile shader " << File << " (" Reason ")\n";\
+			return false;\
+		}\
+	} while(false);
 
+	
+
+#define assert_compile(ShaderObject) \
+do \
+{ \
+	GLint compiled;\
+	glGetObjectParameterivARB(m_VSOID, GL_COMPILE_STATUS, &compiled);\
+	if(!compiled)\
+	{\
+		std::cout << "Failed to compile shader!\n";\
+		GLint blen = 0; \
+		GLsizei slen = 0; \
+		glGetShaderiv(ShaderObject, GL_INFO_LOG_LENGTH, &blen); \
+		if(blen > 1) \
+		{\
+			char* compiler_log = new char[blen]; \
+			glGetInfoLogARB(ShaderObject, blen, &slen, compiler_log); \
+			std::cout << "Compile log: \n", compiler_log; \
+			delete [] compiler_log; \
+		}\
+	}\
+} while(false);
+
+	m_VSOID = glCreateShader(GL_VERTEX_SHADER);
+	assert_shader("glCreateShader vertex");
+	
+	m_FSOID = glCreateShader(GL_FRAGMENT_SHADER);
+	assert_shader("glCreateShader fragment");
+
+	m_VertexShader = "#version 120\n" + m_VertexShader;
+	m_FragmentShader = "#version 120\n" + m_FragmentShader;
 	const char* vs = m_VertexShader.c_str();
-	const char* fs = m_VertexShader.c_str();
+	const char* fs = m_FragmentShader.c_str();
 
 	glShaderSource(m_VSOID, 1, &vs, 0);
+	assert_shader("glShaderSource vertex");
 	glShaderSource(m_FSOID, 1, &fs, 0);
+	assert_shader("glShaderSource fragment");
 
 	glCompileShader(m_VSOID);
+	assert_shader("glCompileShader vertex");
 	glCompileShader(m_FSOID);
+	assert_shader("glCompileShader fragment");
+
+	assert_compile(m_VSOID);
+	assert_compile(m_FSOID);
 
 	m_Program = glCreateProgram();
+	assert_shader("glCreateProgram");
+
 	glAttachShader(m_Program, m_VSOID);
+	assert_shader("glAttachShader vertex");
 	glAttachShader(m_Program, m_FSOID);
+	assert_shader("glAttachShader fragment");
 
 	glLinkProgram(m_Program);
+	assert_shader("glLinkProgram");
 
 	return true;
 }
 
-bool CShader::SetUniform(const std::string& Name, CVector& Value)
+
+CPreProcessor* CShader::GetPreProcessor()
 {
-	int v = glGetUniformLocation(m_Program, Name.c_str());
-	if(v > 1)
-		return false;
-	glUniform3d(v, Value.X, Value.Y, Value.Z);
-	return true;
+	return &m_PreProcessor;
 }
 
 bool CShader::SetUniform(const std::string& Name, float Value)
@@ -184,6 +232,15 @@ bool CShader::SetUniform(const std::string& Name, int Value)
 	return true;
 }
 
+bool CShader::SetUniform(const std::string& Name, CVector& Value)
+{
+	int v = glGetUniformLocation(m_Program, Name.c_str());
+	if(v < 0)
+		return false;
+	glUniform3d(v, Value.X, Value.Y, Value.Z);
+	return true;
+}
+
 void CShader::Call()
 {
 	glUseProgram(m_Program);
@@ -197,4 +254,12 @@ void CShader::DrawQuad()
 		glVertex2d(+1, +1);
 		glVertex2d(-1, +1);
 	glEnd();
+}
+
+void CShader::Enable()
+{
+}
+
+void CShader::Disable()
+{
 }

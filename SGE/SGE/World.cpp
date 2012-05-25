@@ -55,6 +55,12 @@ void CWorld::Draw()
 		(*it)->Draw();
 }
 
+void CWorld::PostDraw()
+{
+	for(auto it = m_Ents.begin(); it != m_Ents.end(); it++)
+		(*it)->PostDraw();
+}
+
 void CWorld::DrawDebug()
 {
 	

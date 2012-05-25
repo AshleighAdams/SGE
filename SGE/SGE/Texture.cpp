@@ -48,7 +48,7 @@ struct TGA_Header_t
 
 bool CTexture::LoadFromFile(const string& File)
 {
-	ifstream ifs(pEngineInstance->GetFileSystem()->GetTexture(File));
+	ifstream ifs(pEngineInstance->GetFileSystem()->GetTexture(File), ios::binary);
 
 	if(!ifs.is_open())
 		return false;
@@ -82,6 +82,7 @@ bool CTexture::LoadFromFile(const string& File)
 
 	if(ifs.fail())
 	{
+		cout << strerror(errno) << '\n';
 		delete [] m_pPixelData;
 		return false;
 	}

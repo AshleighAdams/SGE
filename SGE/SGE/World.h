@@ -15,6 +15,7 @@ public:
 	bool RemoveEntity(CBaseEntity* Ent); // TODO: Later, this can serialize and stuff
 	void Think();
 	void Draw();
+	void PostDraw();
 	void DrawDebug();
 	void Simulate(double Time);
 private:

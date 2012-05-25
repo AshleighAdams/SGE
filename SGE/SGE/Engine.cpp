@@ -229,7 +229,7 @@ bool CEngineInstance::UpdateWindow(string Title, unsigned int Width, unsigned in
 	// TODO: REMOVE ME
 	{
 			// Set lighting intensity and color
-		GLfloat qaAmbientLight[]    = {0.2, 0.2, 0.2, 1.0};
+		GLfloat qaAmbientLight[]    = {1.0, 1.0, 1.0, 1.0};
 		GLfloat qaDiffuseLight[]    = {0.8, 0.8, 0.8, 1.0};
 		GLfloat qaSpecularLight[]    = {1.0, 1.0, 1.0, 1.0};
 		GLfloat emitLight[] = {0.9, 0.9, 0.9, 0.01};
@@ -346,6 +346,7 @@ void CEngineInstance::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glLoadIdentity();
 	
+	glPushMatrix();
 	m_Camera.LookAt();
 	
 	for(float i = -100; i <= 100; i++)
@@ -368,7 +369,9 @@ void CEngineInstance::Draw()
 		m_World.Draw();
 	glDisable(GL_LIGHTING);
 	
-	
+	glPopMatrix();
+
+	m_World.PostDraw();
 
 	SwapBuffers(m_DC);
 }

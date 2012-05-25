@@ -25,21 +25,21 @@ class CShader
 {
 public:
 	CShader();
-	~CShader();
-	CPreProcessor* GetPreProcessor();
-	bool Compile(const std::string& File, std::string& Error);
-	bool CreateProgram();
-	bool Enable();
-	bool Disable();
-	void Call();
-	void DrawQuad();
+	virtual ~CShader();
+	virtual CPreProcessor* GetPreProcessor();
+	virtual bool Compile(const std::string& File, std::string& Error);
+	//virtual bool CreateProgram();
+	virtual void Enable();
+	virtual void Disable();
+	virtual void Call();
+	virtual void DrawQuad();
 
-	bool SetUniform(const std::string& Name, CVector& Value);
-	bool SetUniform(const std::string& Name, float Value);
-	bool SetUniform(const std::string& Name, double Value);
-	bool SetUniform(const std::string& Name, int Value);
+	virtual bool SetUniform(const std::string& Name, CVector& Value);
+	virtual bool SetUniform(const std::string& Name, float Value);
+	virtual bool SetUniform(const std::string& Name, double Value);
+	virtual bool SetUniform(const std::string& Name, int Value);
 
-private:
+protected:
 	
 	
 	CPreProcessor m_PreProcessor;

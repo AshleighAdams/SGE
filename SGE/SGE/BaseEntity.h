@@ -18,6 +18,7 @@ public:
 	virtual void Simulate(double Time) = 0;
 	virtual void Think() = 0;
 	virtual void Draw() = 0;
+	virtual void PostDraw() = 0;
 	virtual void DrawDebug() = 0;
 	// Server only
 	virtual bool ShouldTransmit(CBaseEntity* Ent){ return false; }
