@@ -46,7 +46,7 @@ bool CPreProcessor::BuildShader(const std::string& file, std::string& out)
 		}
 	}
 
-	commandline += " \"" + pEngineInstance->GetFileSystem()->GetShader(file) + "\"";
+	commandline += " -r \"" + pEngineInstance->GetFileSystem()->GetShader(file) + "\"";
 
 	string env = pEngineInstance->GetFileSystem()->GetShader("");
 
@@ -79,10 +79,13 @@ bool CPreProcessor::BuildShader(const std::string& file, std::string& out)
 	size_t len = ifs.tellg();
 	ifs.seekg(0, ios::beg);
 
-	char* in = new char[len];
+	char* in = new char[len+1];
+
+	for(size_t i = 0; i < len + 1; i++)
+		in[i] = 0;
 
 	ifs.read(in, len);
-	out = string(in, len);
+	out = string(in);
 
 	delete [] in;
 	return true;
@@ -154,8 +157,8 @@ do \
 		if(blen > 1) \
 		{\
 			char* compiler_log = new char[blen]; \
-			glGetInfoLogARB(ShaderObject, blen, &slen, compiler_log); \
-			std::cout << "Compile log: \n", compiler_log; \
+			glGetShaderInfoLog(ShaderObject, blen, &slen, compiler_log); \
+			std::cout << "Compile log: \n" << compiler_log << "\n"; \
 			delete [] compiler_log; \
 		}\
 	}\
@@ -256,10 +259,14 @@ void CShader::DrawQuad()
 	glEnd();
 }
 
+// TODO:  Make it so Enable and Disable don't call OpenGL functions, shades will be controlled by the world...
+
 void CShader::Enable()
 {
+	glUseProgram(m_Program);
 }
 
 void CShader::Disable()
 {
+	glUseProgram(0);
 }

@@ -1,5 +1,7 @@
-uniform double time
+// Set by the program
+uniform float time;
+uniform sampler2D tex;
 void main(void)
 {
-gl_FragColor = vec4(0.4,0.4,0.8,1.0)
+gl_FragColor =  texture2D(tex, gl_TexCoord[0].xy);
 }

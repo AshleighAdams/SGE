@@ -13,6 +13,7 @@
 */
 
 #include <string>
+#include <sstream>
 
 #include "Camera.h"
 #include "FileSystem.h"
@@ -22,7 +23,20 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#include <assert.h>
+#define sge_assert(_Type, _What) \
+	do\
+	{\
+		_Type what = (_What);\
+		if(!(what)) \
+		{ \
+			std::stringstream ss;\
+			ss << "Assertion failed at ";\
+			ss << __FILE__ << ":" << __LINE__ << " | ";\
+			ss << (#_What) << " = " << what;\
+			\
+			std::cout << ss.str() << "\n";\
+		} \
+	} while(false)
 
 class CModel;
 

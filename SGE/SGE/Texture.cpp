@@ -112,6 +112,6 @@ bool CTexture::LoadFromFile(const string& File)
  
 	glTexImage2D(GL_TEXTURE_2D, 0, type, Width, Height, 0, type, GL_UNSIGNED_BYTE, m_pPixelData);
 
-	assert(glGetError());
+	sge_assert(GLenum, !glGetError());
 	return true;
 }

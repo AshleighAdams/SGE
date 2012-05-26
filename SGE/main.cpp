@@ -25,14 +25,14 @@ public:
 		bool ret = CShader::Compile(File, Error);
 		Call();
 		TimeU = glGetUniformLocation(m_Program, "time");
+		sge_assert(bool, TimeU >= 0);
 		return ret;
 	}
 	bool SetTime(double Val)
 	{
 		if(TimeU < 0)
 			return false;
-		glUniform1d(TimeU, Val);
-		TimeU = Val;
+		glUniform1f(TimeU, Val);
 	}
 private:
 	int TimeU;
@@ -62,6 +62,8 @@ public:
 		m_Shader.SetTime(pEngineInstance->GetTime());
 
 		m_Texture.LoadFromFile("sample.tga");
+
+		
 	}
 	~CStaticProp()
 	{
@@ -87,25 +89,23 @@ public:
 	}
 	void PostDraw()
 	{
-		m_Shader.SetTime(pEngineInstance->GetTime());
-		m_Shader.Call();
-		//m_Shader.DrawQuad();
 	}
 	void Draw()
 	{
-		glEnable(GL_TEXTURE_2D);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		m_Texture.Bind();
-		m_Model.Draw(m_Pos, m_Ang);
-		glDisable(GL_TEXTURE_2D);
+		m_Shader.Enable();
+			m_Shader.SetTime(pEngineInstance->GetTime());
+			glEnable(GL_TEXTURE_2D);
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+				m_Texture.Bind();
+				m_Model.Draw(m_Pos, m_Ang);
+			glDisable(GL_TEXTURE_2D);
+		m_Shader.Disable();
 	}
 	void DrawDebug()
 	{
 		m_Model.DrawNormals(m_Pos, m_Ang);
 	}
 };
-
-#include "SGE/Shader.h"
 
 int main()
 {
