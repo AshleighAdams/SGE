@@ -109,7 +109,7 @@ void CCamera::Update(double FrameTime)
 	if(GetKeyState(VK_CONTROL) & 0x80)
 		speed = 1.0;
 
-	speed *= FrameTime;
+	speed *= 0.05;
 
 	CVector vFwd = m_Angle.Forward() * fwd;
 	CVector vRight = m_Angle.Right() * right;
@@ -128,8 +128,7 @@ void CCamera::Update(double FrameTime)
 	newvel = newvel * (0.95 - FrameTime * 4.0);
 	
 	m_Velocity = newvel;
-
-	m_Position = m_Position + (newvel * 5000.0) * FrameTime;
+	m_Position = m_Position + (newvel * 1000.0) * FrameTime;
 
 	if(GetKeyState('L') & 0x80)
 		m_Position = CVector(10, 0, 1);
