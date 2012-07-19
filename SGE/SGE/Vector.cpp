@@ -5,6 +5,9 @@ using namespace std;
 
 CVector::CVector()
 {
+	X = 0;
+	Y = 0;
+	Z = 0;
 }
 
 CVector::CVector(double x, double y, double z)
@@ -24,9 +27,6 @@ CVector::CVector(double Pitch, double Yaw)
 
 CVector::~CVector()
 {
-	X = 0;
-	Y = 0;
-	Z = 0;
 }
 
 // Functions
