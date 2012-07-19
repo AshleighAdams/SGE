@@ -58,10 +58,11 @@ public:
 		string null;
 		
 		m_Shader.Compile("test.shader", null);
-		m_Shader.Call();
+		m_Shader.Enable();
 		m_Shader.SetTime(pEngineInstance->GetTime());
+		m_Shader.Disable();
 
-		m_Texture.LoadFromFile("sample.tga");
+		m_Texture.LoadFromFile("player_chrome1.tga");
 
 		
 	}
