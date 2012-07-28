@@ -449,7 +449,7 @@ bool CConfigor::LoadFromString(char* Input, unsigned long Length)
 
 				delete [] pName;
 
-				if(it2 != lexed.end() || (*it2)->Type == ConfigorLexType::String)
+				if(it2 != lexed.end() && (*it2)->Type == ConfigorLexType::String)
 				{
 					it++;
 					unsigned char* pData = (unsigned char*)(*it2)->Value;
