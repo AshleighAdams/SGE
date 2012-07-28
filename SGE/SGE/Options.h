@@ -11,8 +11,9 @@ public:
 	COptions();
 	void SaveSettings();
 	void LoadSettings();
+	IConfigorNode& GetSetting(const std::string Name);
 	CConfigor& GetConfigor();
-	double MouseSensitivity();
+	double MouseSensitivity(); // TODO: Remove all of these...
 	double SetMouseSensitivity();
 	double FOV();
 	void SetFOV(double What);

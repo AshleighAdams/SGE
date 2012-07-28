@@ -119,8 +119,10 @@ int main()
 
 	pEngineInstance->GetWorld()->AddEntity(Prop1);
 
-	int check = pEngineInstance->GetOptions()->GetConfigor()["asd"].GetValue<int>(5);
-	
+	IConfigorNode& helloworld = pEngineInstance->GetOptions()->GetSetting("Hello.World");
+	helloworld.SetValue(true);
+
+	/*
 	MSG msg;
 	while(true)
 	{
@@ -138,7 +140,7 @@ int main()
 		pEngineInstance->Update();
 		pEngineInstance->Draw();
 	}
-
+	*/
 	pEngineInstance->GetOptions()->SaveSettings();
 
 	delete pEngineInstance;

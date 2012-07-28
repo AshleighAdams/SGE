@@ -9,8 +9,6 @@ COptions::COptions()
 {
 }
 
-
-
 void COptions::LoadSettings()
 {
 	m_Config.LoadFromFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
@@ -18,6 +16,37 @@ void COptions::LoadSettings()
 	m_FOV = m_Config["fov"].GetValue<double>(90.0);
 	m_Sensitivity = m_Config["sensitivity"].GetValue<double>(1.0);
 	m_DebugNormals = m_Config["debug"]["normals"].GetValue<bool>(false);
+}
+
+void COptions::SaveSettings()
+{
+	m_Config["fov"].SetValue(m_FOV);
+	m_Config["sensitivity"].SetValue(m_Sensitivity);
+
+	m_Config.SaveToFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
+}
+
+IConfigorNode& COptions::GetSetting(const string Name)
+{
+	string CurrentName = "";
+	IConfigorNode* CurrentNode = m_Config.GetRootNode();
+	char x;
+
+	for(size_t i = 0; i < Name.length(); i++)
+	{
+		x = Name[i];
+		if(x == '.')
+		{
+			CurrentNode = &(*CurrentNode)[CurrentName];
+			CurrentName = "";
+		}
+		else if(x >= 'A' && x <= 'Z')
+			CurrentName += x + 32;
+		else
+			CurrentName += x;
+	}
+
+	return (*CurrentNode)[CurrentName];
 }
 
 CConfigor& COptions::GetConfigor()
@@ -35,13 +64,7 @@ double COptions::FOV()
 	return m_FOV;
 }
 
-void COptions::SaveSettings()
-{
-	m_Config["fov"].SetValue(m_FOV);
-	m_Config["sensitivity"].SetValue(m_Sensitivity);
 
-	m_Config.SaveToFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
-}
 
 res_t COptions::GetResolution()
 {
