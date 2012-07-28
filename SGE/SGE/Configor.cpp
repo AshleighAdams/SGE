@@ -502,6 +502,16 @@ bool CConfigor::LoadFromString(char* Input, unsigned long Length)
 	return true;
 }
 
+bool ValidChar(char x)
+{
+	if(x == '"')
+		return false;
+	if(x == '\\')
+		return false;
+
+	return x >= ' ' && x <= '~';
+}
+
 // Takes data + length, outputs char + length
 void EscapeData(unsigned char* pData, unsigned long Length, unsigned char** Output, unsigned long* OutLength) 
 {
@@ -511,16 +521,18 @@ void EscapeData(unsigned char* pData, unsigned long Length, unsigned char** Outp
 	for(unsigned long i = 0; i < Length; i++)
 	{
 		char x = (char)pData[i];
-		unsigned char ux = (unsigned char)x;
 
-		if((ux >= 32 && ux <= 126) && x != '"')
+		if(ValidChar(x))
 			sb += x;
 		else
 		{
 			switch(x)
 			{
+			case '\\':
+				sb += "\\\\";
+				break;
 			case '"':
-				sb += "\\\"";
+				sb += "\\\""; // \"
 				break;
 			case '\n':
 				sb += "\\n";
