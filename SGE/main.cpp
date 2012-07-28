@@ -111,13 +111,15 @@ public:
 int main()
 {
 	pEngineInstance = new CEngineInstance();
-	pEngineInstance->UpdateWindow("Testing", 0, 0, 32, false); // 0, 0 for loading from settings
-		
+	pEngineInstance->UpdateWindow("Testing", 0, 0, 32, false); // 0, 0 for loading from settings	
 	pEngineInstance->GetCamera()->SetPosition(CVector(-1, 0, 10));
 	
 	CStaticProp* Prop1 = new CStaticProp();
 	Prop1->SetPosition(CVector(0, 0, 0));
+
 	pEngineInstance->GetWorld()->AddEntity(Prop1);
+
+	int check = pEngineInstance->GetOptions()->GetConfigor()["asd"].GetValue<int>(5);
 	
 	MSG msg;
 	while(true)

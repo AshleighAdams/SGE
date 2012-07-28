@@ -26,6 +26,7 @@ public:
 	virtual unsigned char* GetData() = 0;
 	virtual void SetData(unsigned char* pData, unsigned long Length) = 0;
 	virtual char* GetString() = 0;
+	virtual void SetString(const char* pString) = 0;
 	virtual IConfigorNode* GetChild(std::string Name) = 0;
 	virtual IConfigorNode* GetParent() = 0;
 	virtual void AddChild(IConfigorNode* Node) = 0;
@@ -33,6 +34,10 @@ public:
 	virtual IConfigorNodeList* GetChildren() = 0;
 	virtual IConfigorNode& operator[](const std::string& key) = 0;
 	virtual void operator=(char* pData) = 0;
+
+	// Ease of use functions
+	template<typename T> T GetValue(T Default);
+	template<typename T> void SetValue(T Default);
 };
 
 typedef std::list<IConfigorNode*> IConfigorNodeList;
@@ -59,6 +64,7 @@ public:
 	unsigned char* GetData();
 	void SetData(unsigned char* pData, unsigned long Length);
 	char* GetString();
+	void SetString(const char* pString);
 	IConfigorNode* GetChild(std::string Name);
 	IConfigorNode* GetParent();
 	void AddChild(IConfigorNode* Node);
@@ -108,6 +114,41 @@ public:
 	IConfigorNode& operator[](const std::string& Index);
 };
 
+template<typename T> T IConfigorNode::GetValue(const T Default) // Sets the nodes value to the default if it doesn't exist too
+{
+	if(!GetData())
+	{
+		SetValue<T>(Default);
+		return Default;
+	}
+	
+	try
+	{
+		T ret;
+		std::stringstream ss;
+		ss << GetString();
+		ss >> ret;
 
+		return ret;
+	}
+	catch(...)
+	{
+		SetValue<T>(Default);
+		return Default;
+	}
+}
+
+template<typename T> void IConfigorNode::SetValue(const T Value)
+{
+	SetData(0, 0); // This should simulate destroying data
+
+	std::string val;
+	std::stringstream ss;
+	
+	ss << Value;
+	ss >> val;
+
+	SetString(val.c_str());
+}
 
 #endif

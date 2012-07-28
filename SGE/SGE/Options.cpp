@@ -48,6 +48,11 @@ void COptions::LoadSettings()
 		m_FOV = 90.0;
 }
 
+CConfigor& COptions::GetConfigor()
+{
+	return m_Config;
+}
+
 void COptions::SetFOV(double Val)
 {
 	m_FOV = Val;

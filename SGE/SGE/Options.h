@@ -11,6 +11,7 @@ public:
 	COptions();
 	void SaveSettings();
 	void LoadSettings();
+	CConfigor& GetConfigor();
 	double MouseSensitivity();
 	double SetMouseSensitivity();
 	double FOV();

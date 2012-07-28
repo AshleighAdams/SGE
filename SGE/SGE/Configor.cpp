@@ -61,6 +61,9 @@ void CConfigorNode::SetData(unsigned char* pData, unsigned long Length)
 {
 	DestroyData();
 
+	if(!pData)
+		return;
+
 	m_pData = new unsigned char[Length];
 	m_Length = Length;
 
@@ -79,6 +82,18 @@ char* CConfigorNode::GetString()
 	memcpy(ret, m_pData, m_Length);
 	ret[m_Length] = 0;
 	return ret;
+}
+
+void CConfigorNode::SetString(const char* pString)
+{
+	DestroyData();
+
+	m_Length = strlen(pString);
+	m_pData = new unsigned char[m_Length + 1];
+
+	memcpy(m_pData, pString, m_Length);
+
+	m_pData[m_Length] = 0;
 }
 
 IConfigorNode* CConfigorNode::GetChild(string Name)
