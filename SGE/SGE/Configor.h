@@ -36,8 +36,8 @@ public:
 	virtual void operator=(char* pData) = 0;
 
 	// Ease of use functions
-	template<typename T> T GetValue(T Default);
-	template<typename T> void SetValue(T Default);
+	template<typename T> T GetValue(const T Default);
+	template<typename T> void SetValue(const T Value);
 };
 
 typedef std::list<IConfigorNode*> IConfigorNodeList;
@@ -124,7 +124,7 @@ template<typename T> T IConfigorNode::GetValue(const T Default) // Sets the node
 	
 	try
 	{
-		T ret;
+		T ret = T();
 		std::stringstream ss;
 		ss << GetString();
 		ss >> ret;

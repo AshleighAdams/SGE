@@ -63,6 +63,8 @@ private:
 	norm_t* m_pNormals;
 
 	unsigned int m_VertCount;
+
+	IConfigorNode* m_DebugNormals;
 };
 
 #endif

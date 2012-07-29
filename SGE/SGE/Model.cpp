@@ -504,7 +504,7 @@ bool CModel::ParseAndLoad(list<ObjLexNode*>& lexed, bool SwapXY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_NBOID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(norm_t) * faces * 3, m_pNormals, GL_STATIC_DRAW);
 
-	if(!pEngineInstance->GetOptions()->DebugNormals())
+	if(!pEngineInstance->GetOptions()->GetSetting("debug.normals").GetValue(false))
 	{
 		delete [] m_pVertexes;
 		delete [] m_pTextureCords;
@@ -527,6 +527,7 @@ CModel::CModel()
 	m_NBOID = 0;
 	m_VBOID = 0;
 	m_TBOID = 0;
+	m_DebugNormals = &pEngineInstance->GetOptions()->GetSetting("debug.normals");
 }
 
 CModel::~CModel()
@@ -598,7 +599,7 @@ void CModel::FreeResources()
 // Very, very slow.
 void CModel::DrawNormals(CVector& Pos, CAngle& Ang)
 {
-	if(!pEngineInstance->GetOptions()->DebugNormals())
+	if(!m_DebugNormals->GetValue(false))
 		return;
 	glPushMatrix();
 		glTranslated(Pos.X, Pos.Y, Pos.Z);

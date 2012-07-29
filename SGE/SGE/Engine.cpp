@@ -66,9 +66,8 @@ bool CEngineInstance::UpdateWindow(string Title, unsigned int Width, unsigned in
 
 	if(Width == 0 && Height == 0)
 	{
-		res_t res = m_Options.GetResolution();
-		Width = res.x;
-		Height = res.y;
+		Width = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.x").GetValue<unsigned int>(1920);
+		Height = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.y").GetValue<unsigned int>(1080);
 	}
 
 	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
@@ -317,7 +316,7 @@ void CEngineInstance::UpdateViewport(unsigned int Width, unsigned int Height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(m_Options.FOV() / 2.f, (GLfloat)Width / (GLfloat)Height, 0.1f, 10000.0f);
+	gluPerspective(m_Options.GetSetting("engine.fov").GetValue(90.0) / 2.f, (GLfloat)Width / (GLfloat)Height, 0.1f, 10000.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

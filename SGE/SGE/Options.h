@@ -3,8 +3,6 @@
 
 #include "Configor.h"
 
-struct res_t { unsigned int x; unsigned int y; };
-
 class COptions
 {
 public:
@@ -13,18 +11,10 @@ public:
 	void LoadSettings();
 	IConfigorNode& GetSetting(const std::string Name);
 	CConfigor& GetConfigor();
-	double MouseSensitivity(); // TODO: Remove all of these...
-	double SetMouseSensitivity();
-	double FOV();
-	void SetFOV(double What);
-	res_t GetResolution();
-	void SetResolution();
-	bool DebugNormals();
 private:
 	CConfigor m_Config;
-	double m_Sensitivity;
-	double m_FOV;
-	bool m_DebugNormals;
 };
+
+
 
 #endif

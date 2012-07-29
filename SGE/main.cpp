@@ -118,10 +118,7 @@ int main()
 	Prop1->SetPosition(CVector(0, 0, 0));
 
 	pEngineInstance->GetWorld()->AddEntity(Prop1);
-
-	IConfigorNode& helloworld = pEngineInstance->GetOptions()->GetSetting("Hello.World");
-	helloworld.SetValue(true);
-
+	
 	/*
 	MSG msg;
 	while(true)
