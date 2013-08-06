@@ -42,6 +42,16 @@ CVector CCamera::GetPosition()
 	return m_Position;
 }
 
+void CCamera::SetAngle(const CAngle& Ang)
+{
+	m_Angle = Ang;
+}
+
+CAngle CCamera::GetAngle()
+{
+	return m_Angle;
+}
+
 double modulus(double a, double b)
 {
 	int result = static_cast<int>( a / b );
@@ -67,15 +77,15 @@ void CCamera::Update(double FrameTime)
 		double Y = CenterX - mpos.x;
 		double P = CenterY - mpos.y;
 
-		m_Angle.Pitch += P * 0.003;
-		m_Angle.Yaw += Y * 0.003;
+		m_Angle.Pitch += P * 0.03;
+		m_Angle.Yaw += Y * 0.03;
 
-		if(m_Angle.Pitch > 1.5)
-			m_Angle.Pitch = 1.5;
-		else if(m_Angle.Pitch < -1.5)
-			m_Angle.Pitch = -1.5;
+		if(m_Angle.Pitch > 89.9)
+			m_Angle.Pitch = 89.9;
+		else if(m_Angle.Pitch < -89.9)
+			m_Angle.Pitch = -89.9;
 		
-		m_Angle.Yaw = modulus(m_Angle.Yaw, 3.14159265358979232 * 2.0);
+		m_Angle.Yaw = modulus(m_Angle.Yaw, 360);
 		
 
 		SetCursorPos(CenterX, CenterY);

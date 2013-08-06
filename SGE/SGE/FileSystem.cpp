@@ -17,42 +17,53 @@ void ReplaceAll(std::string& str, const std::string& from, const std::string& to
 
 CFileSystem::CFileSystem()
 {
-	char buffer[MAX_PATH];
-	GetModuleFileName( NULL, buffer, MAX_PATH );
-
-	string str = string(buffer);
-	ReplaceAll(str, "\\", "/");
-	
-	string::size_type pos = str.find_last_of( "/" );
-	m_BaseDIR = str.substr(0, pos + 1);
+	m_BaseDIR = "";
+	LoadedBaseDIR = false;
 }
 
 string CFileSystem::GetBaseDIR()
 {
+	if(!LoadedBaseDIR)
+	{
+		LoadedBaseDIR = true;
+		char buffer[MAX_PATH];
+		GetModuleFileName( NULL, buffer, MAX_PATH );
+
+		string str = string(buffer);
+		ReplaceAll(str, "\\", "/");
+	
+		string::size_type pos = str.find_last_of( "/" );
+		m_BaseDIR = str.substr(0, pos + 1);
+	}
 	return m_BaseDIR;
 }
 
 string CFileSystem::GetSound(const string& File)
 {
-	return m_BaseDIR + "sounds/" + File;
+	return GetBaseDIR() + "sounds/" + File;
 }
 
 string CFileSystem::GetModel(const string& File)
 {
-	return m_BaseDIR + "models/" + File;
+	return GetBaseDIR() + "models/" + File;
 }
 
 string CFileSystem::GetTexture(const string& File)
 {
-	return m_BaseDIR + "textures/" + File;
+	return GetBaseDIR() + "textures/" + File;
 }
 
 string CFileSystem::GetConfig(const string& File)
 {
-	return m_BaseDIR + "config/" + File;
+	return GetBaseDIR() + "config/" + File;
 }
 
 string CFileSystem::GetShader(const string& File)
 {
-	return m_BaseDIR + "shaders/" + File;
+	return GetBaseDIR() + "shaders/" + File;
+}
+
+string CFileSystem::GetScript(const string& File)
+{
+	return GetBaseDIR() + "lua/" + File;
 }

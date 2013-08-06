@@ -23,6 +23,7 @@ public:
 	double LengthSqr() const; // These operations are good for comparison, they offer a 'round compare distance' without the slowdowns of sqrt()
 	double Length2D() const;
 	double Length2DSqr() const;
+	CVector ToScreen(const CVector& CamPos, const CAngle& CamAngle, double FOV, unsigned int ScreenWidth, unsigned int ScreenHeight) const;
 
 	CAngle ToAngle() const;
 	CVector Right() const;
@@ -31,6 +32,11 @@ public:
 	double Distance(const CVector& A) const;
 	CVector Cross(const CVector& A) const;
 	double Dot(const CVector& A) const;
+
+	CVector RotateAroundAxis(const CVector& Axis, double Angle) const;
+
+	CVector Perp(const CVector& Axis) const;
+	CVector Parallel(const CVector& Axis) const;
 
 	// These modify the vector!
 	CVector& Normalize();

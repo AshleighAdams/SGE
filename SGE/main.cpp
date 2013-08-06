@@ -33,6 +33,7 @@ public:
 		if(TimeU < 0)
 			return false;
 		glUniform1f(TimeU, Val);
+		return true;
 	}
 private:
 	int TimeU;
@@ -118,7 +119,9 @@ int main()
 	Prop1->SetPosition(CVector(0, 0, 0));
 
 	pEngineInstance->GetWorld()->AddEntity(Prop1);
-	
+
+	double val = pEngineInstance->GetOptions()->GetSetting("graphics.fov").GetValue<double>(90.0);
+	cout << val;
 	/*
 	MSG msg;
 	while(true)

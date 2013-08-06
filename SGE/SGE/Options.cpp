@@ -19,7 +19,7 @@ void COptions::SaveSettings()
 	m_Config.SaveToFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
 }
 
-IConfigorNode& COptions::GetSetting(const string Name)
+IConfigorNode& COptions::GetSetting(const string& Name)
 {
 	string CurrentName = "";
 	IConfigorNode* CurrentNode = m_Config.GetRootNode();

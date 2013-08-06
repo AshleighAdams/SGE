@@ -59,39 +59,43 @@ void CConfigorNode::DestroyData()
 
 void CConfigorNode::SetData(unsigned char* pData, unsigned long Length)
 {
-	DestroyData();
+	bool Destroy = Length > m_Length && Length - m_Length > 128; // Only re-allocate if we're more than 128 bytes
+
+	if(!m_pData)
+		Destroy = true;
+
+	if(Destroy) // Why reallocate memory if we don't need to?
+		DestroyData();
 
 	if(!pData)
 		return;
 
-	m_pData = new unsigned char[Length];
+	if(Destroy)
+		m_pData = new unsigned char[Length];
 	m_Length = Length;
 
 	memcpy(m_pData, pData, Length);
 }
 
-char* CConfigorNode::GetString()
+string CConfigorNode::GetString(const string& Default = "")
 {
 	if(!m_pData)
 	{
-		char* r = new char[1];
-		*r = 0;
-		return r;
+		this->SetString(Default);
+		return Default;
 	}
-	char* ret = new char[m_Length + 1];
-	memcpy(ret, m_pData, m_Length);
-	ret[m_Length] = 0;
-	return ret;
+	
+	return string((char*)m_pData, m_Length);
 }
 
-void CConfigorNode::SetString(const char* pString)
+void CConfigorNode::SetString(const string& Value)
 {
 	DestroyData();
 
-	m_Length = strlen(pString);
+	m_Length = Value.length();
 	m_pData = new unsigned char[m_Length + 1];
 
-	memcpy(m_pData, pString, m_Length);
+	memcpy(m_pData, Value.c_str(), m_Length);
 
 	m_pData[m_Length] = 0;
 }
@@ -303,7 +307,7 @@ string CConfigor::ParseQuotes(char** Out, unsigned long* Length, char* End)
 				break;
 			}
 		}
-	}while(End != (char*)m_pCurrentParseChar);
+	}while((size_t)End < (size_t)m_pCurrentParseChar);
 
 	{
 		std::stringstream out;
@@ -581,7 +585,7 @@ void EscapeData(unsigned char* pData, unsigned long Length, unsigned char** Outp
 #define DODEPTH for(int i = 0; i < Depth; i++)\
 		ofs << '\t'
 
-void RecursiveSave(ofstream& ofs, IConfigorNode* node, int Depth = 0)
+void RecursiveSave(ostream& ofs, IConfigorNode* node, int Depth = 0)
 {
 	unsigned char* pData;
 	unsigned long Length;
@@ -636,6 +640,18 @@ bool CConfigor::SaveToFile(const std::string& Name)
 			RecursiveSave(ofs, *it);
 
 	return true;
+}
+
+string CConfigor::ToString()
+{
+	stringstream ss;
+	
+	IConfigorNodeList* lst = GetRootNode()->GetChildren();
+	if(lst->begin() != lst->end())
+		for(auto it = lst->begin(); it != lst->end(); it++)
+			RecursiveSave(ss, *it);
+
+	return ss.str();
 }
 
 IConfigorNode* CConfigor::GetRootNode()

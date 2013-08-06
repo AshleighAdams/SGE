@@ -9,6 +9,8 @@ public:
 	CCamera();
 	void SetPosition(CVector& Vec);
 	CVector GetPosition();
+	void SetAngle(const CAngle& Ang);
+	CAngle GetAngle();
 	void Update(double FrameTime);
 	void LookAt();
 private:

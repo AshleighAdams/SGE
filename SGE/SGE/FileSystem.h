@@ -13,8 +13,10 @@ public:
 	std::string GetTexture(const std::string& File);
 	std::string GetConfig(const std::string& File);
 	std::string GetShader(const std::string& File);
+	std::string GetScript(const std::string& File);
 private:
 	std::string m_BaseDIR;
+	bool LoadedBaseDIR;
 };
 
 #endif

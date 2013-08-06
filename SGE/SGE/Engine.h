@@ -50,15 +50,17 @@ public:
 	bool UpdateWindow(std::string Title, unsigned int Width, unsigned int Height, unsigned int ColorBit, bool Fullscreen);
 	void KillWindow();
 	void UpdateViewport(unsigned int Width, unsigned int Height);
+	void Init();
 	void Update();
 	void Draw();
+	void SwapBuffer();
 	double GetTime();
 	bool Focused();
 	CCamera*		GetCamera();
 	CFileSystem*	GetFileSystem();
 	COptions*		GetOptions();
 	CWorld*			GetWorld();
-private:
+//private:
 	CCamera		m_Camera;
 	CFileSystem m_FileSystem;
 	COptions	m_Options;

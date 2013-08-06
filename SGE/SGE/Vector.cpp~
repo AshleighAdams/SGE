@@ -19,9 +19,6 @@ CVector::CVector(double x, double y, double z)
 
 CVector::CVector(double Pitch, double Yaw)
 {
-	Pitch /= 180.0 / 3.14159263538979323;
-	Yaw /= 180.0 / 3.14159263538979323;
-
 	double cos_pitch = cos(Pitch);
 	X = cos(Yaw) * cos_pitch;
 	Y = sin(Yaw) * cos_pitch;
@@ -54,54 +51,9 @@ double CVector::Length2DSqr()  const
 	return X * X + Y * Y;
 }
 
-double rads(double ang)
+CAngle CVector::ToAngle()  const
 {
-	return ang / 180.0 * 3.141592653589793238462;
-}
-
-/* Position, visible */
-CVector CVector::ToScreen(const CVector& CamPos, const CAngle& CamAngle, double FOV, unsigned int ScreenWidth, unsigned int ScreenHeight) const
-{
-	CVector up = CamAngle.Up();
-	CVector right = CamAngle.Right();
-	CVector forward = CamAngle.Forward();
-
-	CVector dir = CamPos - *this;
-	double fdp = forward.Dot(dir);
-
-	if(fdp == 0)
-		return CVector(0, 0);
-
-	double d = 4.0 * ScreenHeight / (6.0 * tan(rads(0.5 * FOV)));
-	CVector proj = dir * (d / fdp);
-
-	double x = 0.5 * ScreenWidth + right.Dot(proj);
-	double y = 0.5 * ScreenHeight - up.Dot(proj);
-
-	return CVector(x, y, 0.0);
-}
-
-CAngle CVector::ToAngle() const
-{
-	double yaw, pitch;
-
-	if(this->Y == 0 && this->X == 0)
-	{
-		yaw = 0;
-		pitch = this->Z > 0 ? 270 : 90;
-	}
-	else
-	{
-		yaw = (atan2(this->Y, this->X) * 180.0 / 3.14159263538979323);
-		if(yaw < 0)
-			yaw += 360;
-
-		pitch = (atan2(-this->Z, this->Length2D()) * 180.0 / 3.14159265358979323);
-		if(pitch < 0)
-			pitch += 360;
-	}
-	
-	return CAngle(pitch, yaw, 0);
+	return CAngle(0, 0, 0);
 }
 
 CVector CVector::Right()  const
@@ -139,33 +91,6 @@ double CVector::Dot(const CVector& A)  const
 {
 	return X * A.X + Y * A.Y + Z * A.Z;
 }
-
-
-CVector CVector::RotateAroundAxis(const CVector& Axis, double Angle) const
-{
-	CVector ret;
-
-	Angle = Angle / 180.0 * 3.14159263538979323;
-
-	double cos_theta = cos(Angle);
-	double sin_theta = sin(Angle);
-
-	return this->Perp(Axis) * cos_theta + Axis.Cross(*this) * sin_theta + this->Parallel(Axis);
-
-	return ret;
-	
-}
-
-CVector CVector::Perp(const CVector& Axis) const
-{
-	return *this - this->Parallel(Axis);
-}
-
-CVector CVector::Parallel(const CVector& Axis) const
-{
-	return Axis * this->Dot(Axis);
-}
-
 
 // These modify the actual vector!
 

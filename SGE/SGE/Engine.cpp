@@ -54,20 +54,34 @@ CEngineInstance::CEngineInstance()
 	m_LastSimulateTime = 0.0;
 	m_LastTickTime = 0.0;
 	m_CursorDepth = 0;
+
+	m_FileSystem = CFileSystem();
+	
+	
+	
+	//m_Options.LoadSettings();
+	
 }
 
 CEngineInstance::~CEngineInstance()
 {
 }
 
+void CEngineInstance::Init()
+{
+	bool err = m_Options.GetConfigor().LoadFromFile(pEngineInstance->GetFileSystem()->GetConfig("options.cfg"));
+	if(err)
+		cout << m_Options.GetConfigor().GetError();
+}
+
 bool CEngineInstance::UpdateWindow(string Title, unsigned int Width, unsigned int Height, unsigned int ColorBit, bool Fullscreen)
 {
-	m_Options.LoadSettings();
-
 	if(Width == 0 && Height == 0)
 	{
-		Width = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.x").GetValue<unsigned int>(1920);
-		Height = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.y").GetValue<unsigned int>(1080);
+		Width = 1200;
+		Height = (double)Width * 9.0 / 16.0;
+		//Width = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.x").GetValue<unsigned int>(1920);
+		//Height = pEngineInstance->GetOptions()->GetSetting("graphics.resolution.y").GetValue<unsigned int>(1080);
 	}
 
 	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
@@ -316,7 +330,8 @@ void CEngineInstance::UpdateViewport(unsigned int Width, unsigned int Height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(m_Options.GetSetting("engine.fov").GetValue(90.0) / 2.f, (GLfloat)Width / (GLfloat)Height, 0.1f, 10000.0f);
+	double fov = 90; //m_Options.GetSetting("graphics.fov").GetValue<double>(90.0);
+	gluPerspective(fov / 2.f, (GLfloat)Width / (GLfloat)Height, 0.1f, 10000.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -371,7 +386,10 @@ void CEngineInstance::Draw()
 	glPopMatrix();
 
 	m_World.PostDraw();
+}
 
+void CEngineInstance::SwapBuffer()
+{
 	SwapBuffers(m_DC);
 }
 

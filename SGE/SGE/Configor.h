@@ -1,8 +1,8 @@
 /*
 	A little config thingy for C++
 	Created by C0BRA
-	Copyright XiaTek.org 2012
-	Released under the MIT licence
+	Copyright XiaTek.org 2013
+	Released under the GPLv2 licence
 */
 
 #ifndef CONFIGOR_H
@@ -10,6 +10,8 @@
 
 #include <string>
 #include <list>
+#include <sstream>
+#include <locale>
 
 class IConfigorNode;
 class CConfigor;
@@ -25,8 +27,8 @@ public:
 	virtual unsigned long GetDataLength() = 0;
 	virtual unsigned char* GetData() = 0;
 	virtual void SetData(unsigned char* pData, unsigned long Length) = 0;
-	virtual char* GetString() = 0;
-	virtual void SetString(const char* pString) = 0;
+	virtual std::string GetString(const std::string& Default = "") = 0;
+	virtual void SetString(const std::string& Value) = 0;
 	virtual IConfigorNode* GetChild(std::string Name) = 0;
 	virtual IConfigorNode* GetParent() = 0;
 	virtual void AddChild(IConfigorNode* Node) = 0;
@@ -63,8 +65,8 @@ public:
 	unsigned long GetDataLength();
 	unsigned char* GetData();
 	void SetData(unsigned char* pData, unsigned long Length);
-	char* GetString();
-	void SetString(const char* pString);
+	std::string GetString(const std::string& Default);
+	void SetString(const std::string& Value);
 	IConfigorNode* GetChild(std::string Name);
 	IConfigorNode* GetParent();
 	void AddChild(IConfigorNode* Node);
@@ -109,6 +111,7 @@ public:
 	bool LoadFromFile(const std::string& Name);
 	bool LoadFromString(char* Input, unsigned long Length);
 	bool SaveToFile(const std::string& Name);
+	std::string ToString();
 	IConfigorNode* GetRootNode();
 	std::string GetError();
 	IConfigorNode& operator[](const std::string& Index);
@@ -126,6 +129,7 @@ template<typename T> T IConfigorNode::GetValue(const T Default) // Sets the node
 	{
 		T ret = T();
 		std::stringstream ss;
+		ss.imbue(std::locale(""));
 		ss << GetString();
 		ss >> ret;
 
@@ -144,6 +148,7 @@ template<typename T> void IConfigorNode::SetValue(const T Value)
 
 	std::string val;
 	std::stringstream ss;
+	ss.imbue(std::locale(""));
 	
 	ss << Value;
 	ss >> val;

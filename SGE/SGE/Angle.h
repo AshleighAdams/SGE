@@ -12,10 +12,10 @@ public:
 	double Roll;
 	CAngle(double Pitch, double Yaw, double Roll);
 	CAngle();
-	CVector Forward();
-	CVector Right();
-	CVector Up();
-	CVector ToVector();
+	CVector Forward() const;
+	CVector Right() const;
+	CVector Up() const;
+	CVector ToVector() const;
 };
 
 // TODO: Operators

@@ -21,9 +21,6 @@
     <ClCompile Include="SGE\Vector.cpp">
       <Filter>Source Files\SGE</Filter>
     </ClCompile>
-    <ClCompile Include="SGE\Engine.cpp">
-      <Filter>Source Files\SGE</Filter>
-    </ClCompile>
     <ClCompile Include="SGE\Options.cpp">
       <Filter>Source Files\SGE</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Source Files\SGE</Filter>
     </ClCompile>
     <ClCompile Include="SGE\Texture.cpp">
+      <Filter>Source Files\SGE</Filter>
+    </ClCompile>
+    <ClCompile Include="SGE\Engine.cpp">
       <Filter>Source Files\SGE</Filter>
     </ClCompile>
   </ItemGroup>

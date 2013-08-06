@@ -9,7 +9,7 @@ public:
 	COptions();
 	void SaveSettings();
 	void LoadSettings();
-	IConfigorNode& GetSetting(const std::string Name);
+	IConfigorNode& GetSetting(const std::string& Name);
 	CConfigor& GetConfigor();
 private:
 	CConfigor m_Config;
